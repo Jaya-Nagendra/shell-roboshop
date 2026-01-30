@@ -3,11 +3,11 @@
 LOG_FOLDER="/var/log/roboshop"
 LOG_FILE="$LOG_FOLDER/$0.log"
 
-N='\e[30m'
-R='\e[31m'
-G='\e[32m'
-Y='\e[33m'
-B='\e[34m'
+N="\e[0m"
+R="\e[31m"
+G="\e[32m"
+Y="\e[33m"
+B="\e[34m"
 
 USER_ID=$(id -u)
 
