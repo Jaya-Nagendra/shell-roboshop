@@ -12,7 +12,7 @@ B="\e[34m"
 USER_ID=$(id -u)
 
 if [ $USER_ID -ne 0 ]; then
-echo "$R Run this script with Root account $N" | tee -a $LOG_FILE
+echo -e "$R Run this script with Root account $N" | tee -a $LOG_FILE
 exit 1
 fi
 
@@ -20,9 +20,9 @@ mkdir -p $LOG_FOLDER
 
 VALIDATE(){
     if [ $1 -eq 0 ]; then
-        echo "$2 ....$G SUCCESS $N" | tee -a $LOG_FILE
+        echo -e "$2 ....$G SUCCESS $N" | tee -a $LOG_FILE
         else
-        echo "$2 .... $R FAILED $N" | tee -a $LOG_FILE
+        echo -e "$2 .... $R FAILED $N" | tee -a $LOG_FILE
         exit 1
     fi
 }
