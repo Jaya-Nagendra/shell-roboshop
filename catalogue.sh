@@ -31,13 +31,13 @@ VALIDATE(){
 }
 
 
-dnf module disable nodejs -y &>>$LOGS_FILE
+dnf module disable nodejs -y &>>$LOG_FILE
 VALIDATE $? "node module disabled"
 
-dnf module enable nodejs:20 -y &>>$LOGS_FILE
+dnf module enable nodejs:20 -y &>>$LOG_FILE
 VALIDATE $? "node module enabled"
 
-dnf install nodejs -y &>>$LOGS_FILE
+dnf install nodejs -y &>>$LOG_FILE
 VALIDATE $? "Install node"
 
 id roboshop
@@ -58,17 +58,17 @@ cd /app
 rm -rf /app/*
 VALIDATE $? "Removing existing code"
 
-unzip /tmp/catalogue.zip &>>$LOGS_FILE
+unzip /tmp/catalogue.zip &>>$LOG_FILE
 VALIDATE $? "Unziped the file"
 
-npm install &>>$LOGS_FILE
+npm install &>>$LOG_FILE
 VALIDATE $? "npm install"
 
 cp $SCRIPT_DIR/catalogue.service /etc/systemd/system/catalogue.service
 VALIDATE $? "Service file copy"
 
 systemctl daemon-reload
-systemctl enable catalogue &>>$LOGS_FILE
+systemctl enable catalogue &>>$LOG_FILE
 systemctl start catalogue
 VALIDATE $? "Catalogue start"
 
