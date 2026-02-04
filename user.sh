@@ -61,7 +61,6 @@ npm install
 VALIDATE $? "npm install"
 
 cp $SCRIPT_DIR/user.service /etc/systemd/system/user.service
-
 VALIDATE $? "Created systemctl service"
 
 systemctl daemon-reload
