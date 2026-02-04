@@ -44,3 +44,4 @@ systemctl enable redis
 systemctl start redis &>>$LOG_FILE
 
 VALIDATE $? "Start redis"
+
