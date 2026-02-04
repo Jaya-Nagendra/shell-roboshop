@@ -35,6 +35,14 @@ dnf module enable nodejs:20 -y &>>$LOG_FILE
 dnf install nodejs -y &>>$LOG_FILE
 VALIDATE $? "Install nodejs"
 
+id roboshop
+if [ $? -ne 0 ]; then
+useradd --system --home /app --shell /sbin/nologin --comment "roboshop system user" roboshop
+VALIDATE $? "User creation"
+else
+echo "User allready exist"
+fi
+
 mkdir -p /app 
 
 
