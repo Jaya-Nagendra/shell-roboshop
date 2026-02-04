@@ -8,7 +8,7 @@ R="\e[31m"
 G="\e[32m"
 Y="\e[33m"
 B="\e[34m"
-SCRIPT_DIR=$PWD
+MSQL_HOST=mysql.ljnag.space
 USER_ID=$(id -u)
 
 if [ $USER_ID -ne 0 ]; then
@@ -27,4 +27,53 @@ VALIDATE(){
     fi
 }
 
-dnf install maven -y
+dnf install maven -y &>>$LOG_FILE
+VALIDATE $? "Install maven"
+
+id roboshop
+if [ $? -ne 0 ]; then
+useradd --system --home /app --shell /sbin/nologin --comment "roboshop system user" roboshop
+VALIDATE $? "User creation"
+else
+echo "User allready exist"
+fi
+
+mkdir -p /app  &>>$LOG_FILE
+
+curl -L -o /tmp/shipping.zip https://roboshop-artifacts.s3.amazonaws.com/shipping-v3.zip 
+VALIDATE $? "Download shipping"
+
+rm -rf /app/*
+cd /app 
+unzip /tmp/shipping.zip 
+VALIDATE $? "unzip shipping"
+
+
+cd /app 
+mvn clean package  &>>$LOG_FILE
+VALIDATE $? "maven clean shipping"
+mv target/shipping-1.0.jar shipping.jar  &>>$LOG_FILE
+VALIDATE $? "moving and renaming shipping"
+
+
+systemctl daemon-reload
+VALIDATE $? "reload shipping"
+
+systemctl enable shipping 
+systemctl start shipping &>>$LOG_FILE
+VALIDATE $? "start shipping"
+
+dnf install mysql -y  &>>$LOG_FILE
+VALIDATE $? "install mysqql"
+
+mysql -h $MSQL_HOST -uroot -pRoboShop@1 < /app/db/schema.sql &>>$LOG_FILE
+VALIDATE $? "load schema"
+
+mysql -h $MSQL_HOST -uroot -pRoboShop@1 < /app/db/app-user.sql  &>>$LOG_FILE
+VALIDATE $? "load user"
+
+mysql -h $MSQL_HOST -uroot -pRoboShop@1 < /app/db/master-data.sql &>>$LOG_FILE
+VALIDATE $? "load data"
+
+systemctl restart shipping &>>$LOG_FILE
+VALIDATE $? "restart shipping"
