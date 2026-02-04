@@ -53,7 +53,7 @@ VALIDATE $? "Moving to app directory"
 rm -rf /app/*
 VALIDATE $? "Removing existing code"
 
-unzip /tmp/user.zip &>>$LOGS_FILE
+unzip /tmp/user.zip &>>$LOG_FILE
 VALIDATE $? "Uzip user code"
 
 cd /app 
@@ -65,6 +65,6 @@ cp $SCRIPT_DIR/user.service /etc/systemd/system/user.service
 VALIDATE $? "Created systemctl service"
 
 systemctl daemon-reload
-systemctl enable user  &>>$LOGS_FILE
+systemctl enable user  &>>$LOG_FILE
 systemctl start user
 VALIDATE $? "Starting and enabling user"
