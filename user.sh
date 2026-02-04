@@ -8,7 +8,7 @@ R="\e[31m"
 G="\e[32m"
 Y="\e[33m"
 B="\e[34m"
-
+SCRIPT_DIR=$PWD
 USER_ID=$(id -u)
 
 if [ $USER_ID -ne 0 ]; then
