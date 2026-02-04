@@ -9,6 +9,8 @@ G="\e[32m"
 Y="\e[33m"
 B="\e[34m"
 MSQL_HOST=mysql.ljnag.space
+SCRIPT_DIR=$PWD
+
 USER_ID=$(id -u)
 
 if [ $USER_ID -ne 0 ]; then
@@ -48,6 +50,7 @@ cd /app
 unzip /tmp/shipping.zip 
 VALIDATE $? "unzip shipping"
 
+cp $SCRIPT_DIR/shipping.service /etc/systemd/system/shipping.service
 
 cd /app 
 mvn clean package  &>>$LOG_FILE
