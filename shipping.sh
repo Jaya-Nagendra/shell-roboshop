@@ -62,12 +62,11 @@ VALIDATE $? "moving and renaming shipping"
 systemctl daemon-reload
 VALIDATE $? "reload shipping"
 
-systemctl enable shipping 
-systemctl start shipping &>>$LOG_FILE
-VALIDATE $? "start shipping"
-
 dnf install mysql -y  &>>$LOG_FILE
 VALIDATE $? "install mysqql"
+
+mysql -h $MYSQL_HOST -uroot -pRoboShop@1 -e 'use cities'
+if [ $? -ne 0 ]; then
 
 mysql -h $MSQL_HOST -uroot -pRoboShop@1 < /app/db/schema.sql &>>$LOG_FILE
 VALIDATE $? "load schema"
@@ -78,5 +77,10 @@ VALIDATE $? "load user"
 mysql -h $MSQL_HOST -uroot -pRoboShop@1 < /app/db/master-data.sql &>>$LOG_FILE
 VALIDATE $? "load data"
 
-systemctl restart shipping &>>$LOG_FILE
-VALIDATE $? "restart shipping"
+else
+    echo -e "data is already loaded ... $Y SKIPPING $N"
+fi
+
+systemctl enable shipping 
+systemctl start shipping &>>$LOG_FILE
+VALIDATE $? "enable start shipping"
